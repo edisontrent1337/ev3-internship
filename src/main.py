@@ -1,16 +1,33 @@
-# This is a sample Python script.
+import ev3dev.ev3 as ev3
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+a = ev3.LargeMotor("outA")
+b = ev3.LargeMotor("outB")
+c = ev3.LargeMotor("outC")
+d = ev3.LargeMotor("outD")
+f = ev3.TouchSensor("in1")
+g = ev3.UltrasonicSensor("in3")
+h = ev3.TouchSensor("in4")
+dist = g.MODE_US_DIST_CM
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def forward():
+    a.run_direct(duty_cycle_sp=50)
+    b.run_direct(duty_cycle_sp=-50)
+    c.run_direct(duty_cycle_sp=-50)
+    d.run_direct(duty_cycle_sp=50)
+    while True:
+        if g.distance_centimeters <= 20 or 1 == f.is_pressed:
+            a.stop()
+            b.stop()
+            c.stop()
+            d.stop()
+            start()
 
 
-# Press the green button in the gutter to run the script
-if __name__ == '__main__':
-    print_hi('sdsdffdsf')
+def start():
+    while True:
+        if 1 == h.is_pressed:
+            forward()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+start()

@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
-
+import ev3dev.ev3 as ev3
+from main import start
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -7,13 +8,15 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("$SYS/#")
+    client.subscribe("/valtech/internship/#")
 
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    print(msg.topic + " " + msg.payload.decode('utf-8'))
-
+    decoded = msg.payload.decode('utf-8')
+    print(msg.topic + " " + decoded)
+    if decoded == 'start':
+        start()
 
 
 
@@ -26,5 +29,7 @@ client.connect("mqtt.eclipseprojects.io", 1883, 60)
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
 # Other loop*() functions are available that give a threaded interface and a
-# manual interface.
+# manual interface
+
+
 client.loop_forever()

@@ -90,6 +90,3 @@ def start():
             left()
         if 1 == i.is_pressed:
             forward()
-
-
-start()

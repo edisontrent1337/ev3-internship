@@ -1,35 +1,49 @@
 import paho.mqtt.client as mqtt
-import ev3dev.ev3 as ev3
-from main import start
+from ev3dev.core import Sound
 
-# The callback for when the client receives a CONNACK response from the server.
+from main import stop
+from main import left
+from main import right
+from main import forward
+from main import setSpeed
+from main import turn
+
+
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
 
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
     client.subscribe("/valtech/internship/#")
 
 
-# The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     decoded = msg.payload.decode('utf-8')
     print(msg.topic + " " + decoded)
-    if decoded == 'start':
-        start()
+    if decoded == "forward":
+        forward()
+    elif decoded == "left":
+        left()
+    elif decoded == "right":
+        right()
+    elif decoded == "stop":
+        stop()
+    elif "speed" in decoded:
+        speed = decoded.split(":")[1]
+        setSpeed(speed)
+    elif "chat" in decoded:
+        text = decoded.split(":")[1]
+        Sound.speak(text).wait()
+    elif "turn" in decoded:
+        ha = decoded.split(":")[1]
+        turn(int(ha))
+    else:
+        print("Unknown message:" + decoded)
 
 
-
+print("can start robot now")
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
 client.connect("mqtt.eclipseprojects.io", 1883, 60)
-
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface
-
 
 client.loop_forever()

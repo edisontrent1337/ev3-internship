@@ -5,13 +5,12 @@ from main import stop
 from main import left
 from main import right
 from main import forward
-from main import setSpeed
 from main import turn
+from main import turn_test
 
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
-
     client.subscribe("/valtech/internship/#")
 
 
@@ -26,15 +25,15 @@ def on_message(client, userdata, msg):
         right()
     elif decoded == "stop":
         stop()
-    elif "speed" in decoded:
-        speed = decoded.split(":")[1]
-        setSpeed(speed)
     elif "chat" in decoded:
         text = decoded.split(":")[1]
         Sound.speak(text).wait()
     elif "turn" in decoded:
         ha = decoded.split(":")[1]
         turn(int(ha))
+    elif "steer" in decoded:
+        angle = decoded.split(":")[1]
+        turn_test(float(angle))
     else:
         print("Unknown message:" + decoded)
 

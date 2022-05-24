@@ -1,5 +1,7 @@
 import ev3dev.ev3 as ev3
 
+heading = 0
+
 globalSpeed = 50
 TurnSpeed = 100
 a = ev3.LargeMotor("outA")
@@ -73,10 +75,51 @@ def left():
     # break
 
 
-def setSpeed(value):
+def set_speed(value):
     global globalSpeed
     globalSpeed = int(value)
     a.duty_cycle_sp = globalSpeed
     b.duty_cycle_sp = 0 - globalSpeed
     c.duty_cycle_sp = 0 - globalSpeed
     d.duty_cycle_sp = globalSpeed
+
+
+def set_motor_speed(motor, value):
+
+    if motor == 'a':
+        a.duty_cycle_sp = value
+    if motor == 'b':
+        b.duty_cycle_sp = value
+    if motor == 'c':
+        c.duty_cycle_sp = value
+    if motor == 'd':
+        d.duty_cycle_sp = value
+
+    if motor == 'ab':
+        a.run_direct(duty_cycle_sp=value)
+        b.run_direct(duty_cycle_sp=value)
+
+
+def drive(base_speed=50):
+    a.position = 0
+    b.position = 0
+    while True:
+        if a.position < b.position:
+            a.run_direct(duty_cycle_sp=base_speed + 3)
+            b.run_direct(duty_cycle_sp=base_speed)
+        if b.position < a.position:
+            a.run_direct(duty_cycle_sp=base_speed)
+            b.run_direct(duty_cycle_sp=base_speed + 3)
+        else:
+            a.run_direct(duty_cycle_sp=base_speed)
+            b.run_direct(duty_cycle_sp=base_speed)
+
+
+
+
+def turn_test(value):
+    if float(value) < 0:
+        c.run_timed(speed_sp=-250, time_sp=50)
+    else:
+        c.run_timed(speed_sp=250, time_sp=50)
+

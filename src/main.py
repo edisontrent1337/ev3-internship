@@ -65,9 +65,21 @@ def rotacionar(angle):
 
 
 def acceltesting(speed2):
+    global testlol
     testlol = speed2
-    while testlol != 0:
-        a.duty_cycle_sp = testlol
-        b.duty_cycle_sp = testlol
-        testlol = testlol - 1
-        time.sleep(0.1)
+    if testlol > 0:
+        while testlol != 0:
+            a.run_direct(duty_cycle_sp=testlol)
+            b.run_direct(duty_cycle_sp=testlol)
+            testlol = testlol - 1
+            time.sleep(0.1)
+            print("test")
+    elif testlol < 0:
+        while testlol != 0:
+            a.run_direct(duty_cycle_sp=testlol)
+            b.run_direct(duty_cycle_sp=testlol)
+            testlol = testlol + 1
+            time.sleep(0.1)
+            print("test")
+    else:
+        print("Bro I don't know what to do when the speed is 0...")

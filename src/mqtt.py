@@ -6,6 +6,7 @@ from main import turn
 from main import rotacionar
 from main import set_motor_speed
 from main import acceltesting
+from main import speedup
 
 
 def on_connect(client, userdata, flags, rc):
@@ -33,6 +34,10 @@ def on_message(client, userdata, msg):
     elif "acceltesting" in decoded:
         testspeed = decoded.split(":")[1]
         acceltesting(int(testspeed))
+    elif "speedup" in decoded:
+        speedaddition = decoded.split(":") [1]
+        speedup(int(speedaddition))
+
     else:
         print("Unknown message:" + decoded)
 

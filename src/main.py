@@ -1,6 +1,7 @@
 import time
 
 import ev3dev.ev3 as ev3
+
 global testlol
 heading = 0
 
@@ -83,3 +84,14 @@ def acceltesting(speed2):
             print("test")
     else:
         print("Bro I don't know what to do when the speed is 0...")
+
+
+def speedup(add):
+    if abs(a.duty_cycle_sp) < 100 and abs(b.duty_cycle_sp) < 100:
+        apples = a.duty_cycle_sp
+        strawberrys = b.duty_cycle_sp
+        a.run_direct(duty_cycle_sp=apples + add)
+        b.run_direct(duty_cycle_sp=strawberrys + add)
+    else:
+        a.stop()
+        b.stop()

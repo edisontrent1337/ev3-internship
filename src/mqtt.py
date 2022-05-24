@@ -2,13 +2,11 @@ import paho.mqtt.client as mqtt
 from ev3dev.core import Sound
 
 from main import stop
-from main import left
-from main import right
-from main import forward
 from main import turn
-from main import turn_test
 from main import rotacionar
 from main import set_motor_speed
+from main import acceltesting
+
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
@@ -18,13 +16,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     decoded = msg.payload.decode('utf-8')
     print(msg.topic + " " + decoded)
-    if decoded == "forward":
-        forward()
-    elif decoded == "left":
-        left()
-    elif decoded == "right":
-        right()
-    elif decoded == "stop":
+    if decoded == "stop":
         stop()
     elif "chat" in decoded:
         text = decoded.split(":")[1]
@@ -32,15 +24,15 @@ def on_message(client, userdata, msg):
     elif "turn" in decoded:
         ha = decoded.split(":")[1]
         turn(int(ha))
-    elif "steer" in decoded:
-        angle = decoded.split(":")[1]
-        turn_test(float(angle)*50)
     elif "rotarlasmotoresenelgrado" in decoded:
         rotaciones = decoded.split(":")[1]
         rotacionar(float(rotaciones))
     elif "acceleration" in decoded:
         speed = decoded.split(":")[1]
-        set_motor_speed("ab", float(speed)*75)
+        set_motor_speed("ab", float(speed) * 75)
+    elif "acceltesting" in decoded:
+        testspeed = decoded.split(":")[1]
+        acceltesting(int(testspeed))
     else:
         print("Unknown message:" + decoded)
 

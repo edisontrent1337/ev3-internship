@@ -1,5 +1,7 @@
-import ev3dev.ev3 as ev3
+import time
 
+import ev3dev.ev3 as ev3
+global testlol
 heading = 0
 
 globalSpeed = 50
@@ -38,52 +40,15 @@ def set_motor_speed(motor, value):
         c.run_direct(duty_cycle_sp=value)
     if motor == 'd':
         d.run_direct(duty_cycle_sp=value)
+    if motor == 'ab':
+        a.run_direct(duty_cycle_sp=value)
+        b.run_direct(duty_cycle_sp=value)
 
 
 def stop():
     a.stop()
     b.stop()
     c.stop()
-    d.stop()
-
-
-def forward():
-    print("Moving forward")
-    print()
-    a.run_direct(duty_cycle_sp=globalSpeed)
-    b.run_direct(duty_cycle_sp=-globalSpeed)
-    c.run_direct(duty_cycle_sp=-globalSpeed)
-    d.run_direct(duty_cycle_sp=globalSpeed)
-    # while True:
-    #    if g.distance_centimeters <= 10:
-    #        stop()
-    #        break
-
-
-def right():
-    print("Turning right")
-    print()
-    a.run_direct(duty_cycle_sp=0 - TurnSpeed)
-    b.run_direct(duty_cycle_sp=TurnSpeed)
-    c.run_direct(duty_cycle_sp=0 - TurnSpeed)
-    d.run_direct(duty_cycle_sp=TurnSpeed)
-    # while True:
-    # if g.distance_centimeters <= 20:
-    # stop()
-    # break
-
-
-def left():
-    print("Turning left")
-    print()
-    a.run_direct(duty_cycle_sp=TurnSpeed)
-    b.run_direct(duty_cycle_sp=0 - TurnSpeed)
-    c.run_direct(duty_cycle_sp=TurnSpeed)
-    d.run_direct(duty_cycle_sp=0 - TurnSpeed)
-    # while True:
-    # if g.distance_centimeters <= 20:
-    # stop()
-    # break
 
 
 def set_speed(value):
@@ -95,39 +60,14 @@ def set_speed(value):
     d.duty_cycle_sp = globalSpeed
 
 
-def set_motor_speed(motor, value):
-    if motor == 'a':
-        a.duty_cycle_sp = value
-    if motor == 'b':
-        b.duty_cycle_sp = value
-    if motor == 'c':
-        c.duty_cycle_sp = value
-    if motor == 'd':
-        d.duty_cycle_sp = value
-
-    if motor == 'ab':
-        a.run_direct(duty_cycle_sp=value)
-        b.run_direct(duty_cycle_sp=value)
-
-
-def drive(base_speed=50):
-    a.position = 0
-    b.position = 0
-    while True:
-        if a.position < b.position:
-            a.run_direct(duty_cycle_sp=base_speed + 1)
-            b.run_direct(duty_cycle_sp=base_speed)
-        if b.position < a.position:
-            a.run_direct(duty_cycle_sp=base_speed)
-            b.run_direct(duty_cycle_sp=base_speed + 1)
-        else:
-            a.run_direct(duty_cycle_sp=base_speed)
-            b.run_direct(duty_cycle_sp=base_speed)
-
-
-def turn_test(value):
-    c.run_to_abs_pos(position_sp=value, speed_sp=120, stop_action="hold")
-
-
 def rotacionar(angle):
     c.run_to_abs_pos(position_sp=angle, speed_sp=50, stop_action="hold")
+
+
+def acceltesting(speed2):
+    testlol = speed2
+    while testlol != 0:
+        a.duty_cycle_sp = testlol
+        b.duty_cycle_sp = testlol
+        testlol = testlol - 1
+        time.sleep(0.1)

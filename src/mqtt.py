@@ -8,7 +8,7 @@ from main import forward
 from main import turn
 from main import turn_test
 from main import rotacionar
-
+from main import set_motor_speed
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
@@ -34,10 +34,13 @@ def on_message(client, userdata, msg):
         turn(int(ha))
     elif "steer" in decoded:
         angle = decoded.split(":")[1]
-        turn_test(float(angle))
+        turn_test(float(angle)*50)
     elif "rotarlasmotoresenelgrado" in decoded:
         rotaciones = decoded.split(":")[1]
         rotacionar(float(rotaciones))
+    elif "acceleration" in decoded:
+        speed = decoded.split(":")[1]
+        set_motor_speed("ab", float(speed)*75)
     else:
         print("Unknown message:" + decoded)
 

@@ -126,10 +126,7 @@ def drive(base_speed=50):
 
 
 def turn_test(value):
-    if float(value) < 0:
-        c.run_timed(speed_sp=-250, time_sp=50)
-    else:
-        c.run_timed(speed_sp=250, time_sp=50)
+    c.run_to_abs_pos(position_sp=value, speed_sp=120, stop_action="hold")
 
 
 def rotacionar(angle):

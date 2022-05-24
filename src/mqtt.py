@@ -7,6 +7,7 @@ from main import right
 from main import forward
 from main import turn
 from main import turn_test
+from main import rotacionar
 
 
 def on_connect(client, userdata, flags, rc):
@@ -34,6 +35,9 @@ def on_message(client, userdata, msg):
     elif "steer" in decoded:
         angle = decoded.split(":")[1]
         turn_test(float(angle))
+    elif "rotarlasmotoresenelgrado" in decoded:
+        rotaciones = decoded.split(":")[1]
+        rotacionar(float(rotaciones))
     else:
         print("Unknown message:" + decoded)
 

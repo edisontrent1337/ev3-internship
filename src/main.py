@@ -12,6 +12,9 @@ b = ev3.LargeMotor("outB")
 c = ev3.LargeMotor("outC")
 d = ev3.LargeMotor("outD")
 
+a.run_direct(duty_cycle_sp=0)
+b.run_direct(duty_cycle_sp=0)
+
 
 def turn(value):
     x = int(value)
@@ -61,8 +64,9 @@ def set_speed(value):
     d.duty_cycle_sp = globalSpeed
 
 
-def rotacionar(angle):
-    c.run_to_abs_pos(position_sp=angle, speed_sp=50, stop_action="hold")
+def turn_test(angle):
+    print(f'steering angle: {angle}')
+    c.run_to_abs_pos(position_sp=angle, speed_sp=0.5*angle, stop_action="coast")
 
 
 def acceltesting(speed2):
@@ -87,11 +91,8 @@ def acceltesting(speed2):
 
 
 def speedup(add):
-    if abs(a.duty_cycle_sp) < 100 and abs(b.duty_cycle_sp) < 100:
-        apples = a.duty_cycle_sp
-        strawberrys = b.duty_cycle_sp
-        a.run_direct(duty_cycle_sp=apples + add)
-        b.run_direct(duty_cycle_sp=strawberrys + add)
-    else:
-        a.stop()
-        b.stop()
+    speed_a = max(-100, min(100, a.duty_cycle_sp + add))
+    speed_b = max(-100, min(100, b.duty_cycle_sp + add))
+    print(f'adding {add} to speed')
+    a.duty_cycle_sp = speed_a
+    b.duty_cycle_sp = speed_b
